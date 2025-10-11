@@ -79,16 +79,18 @@ class NotionPagesDB:
         return self.df
 
     def active_phase(self, phase_name: str) -> (bool, str):
-        self.df = self.df[self.df['Name'] == phase_name]
-        if self.df.empty:
+        filtered_df = self.df[self.df['Name'] == phase_name]
+        if filtered_df.empty:
             return False, 'No phase found'
-        copy_page_content_full(self.n2p, self.df.at[0, 'Content pages DB'], self.df.at[0, 'PageID'])
+        print(len(filtered_df))
+        for indice, riga in filtered_df.iterrows():
+            copy_page_content_full(self.n2p, riga['Content pages DB'], riga['PageID'])
         return True, None
 
 
 def main():
     notionPages = NotionPagesDB()
-    ok, err = notionPages.active_phase('00-Phase')
+    ok, err = notionPages.active_phase('TEST-PHASE')
     if err is not None:
         print(err)
 

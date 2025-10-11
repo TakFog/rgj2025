@@ -29,13 +29,16 @@ def copy_page_content_full(notion: Notion2PandasClient, source_page_id: str, tar
         """Prepare a media block (image, file, pdf, video, audio) for appending."""
         file_info = block_content.get("file")
         external_info = block_content.get("external")
-
-        if block_type != "image":
-            return None  # Puoi estendere per altri media se vuoi
+        filename = ""
+        if block_type == "image":
+            filename = "image.jpg"
+        if block_type == "audio":
+            filename = "audio.mp3"
+        if block_type == "video":
+            filename = "video.mp4"
 
         if file_info and "url" in file_info:
             # Notion-hosted → scarica e ricarica
-            filename = "image.jpg"
             response = requests.get(file_info["url"])
             response.raise_for_status()
             content = response.content
@@ -55,15 +58,15 @@ def copy_page_content_full(notion: Notion2PandasClient, source_page_id: str, tar
             os.remove(filename)
             return {
                 "object": "block",
-                "type": "image",
-                "image": {"type": "file_upload", "file_upload": {"id": file_upload_id}}
+                "type": block_type,
+                block_type: {"type": "file_upload", "file_upload": {"id": file_upload_id}}
             }
 
         elif external_info and "url" in external_info:
             # External → copia direttamente
             return {
                 "object": "block",
-                "type": "image",
+                "type": block_type,
                 "image": {"type": "external", "external": {"url": external_info["url"]}}
             }
 
@@ -72,12 +75,12 @@ def copy_page_content_full(notion: Notion2PandasClient, source_page_id: str, tar
     def copy_block_recursive(src_block_id: str, dst_parent_id: str):
         """Recursively copy all child blocks."""
         children = notion.blocks.children.list(block_id=src_block_id)["results"]
-
+        supported_block_types = ["image", "video", "audio"]
         for child in children:
             block_type = child["type"]
             block_content = child.get(block_type, {})
 
-            if block_type == "image":
+            if block_type in supported_block_types:
                 media_block = clean_media_block(block_type, block_content)
                 if not media_block:
                     continue
