@@ -27,6 +27,8 @@ class DiscordBot:
 
     async def send_message(self, message: str, file=None):
         channel = self.client.get_channel(self.default_channel)
+        if file is not None:
+            file = discord.File(file, filename=os.path.basename(file))
         await channel.send(message, file=file)
 
     async def channel_history(self, channel_id: int = None, channel: GuildChannel = None, after: datetime.datetime = None) -> Tuple[List[dict], Any]:

@@ -1,8 +1,6 @@
-import json
 from notion2pandas import Notion2PandasClient
 import time
 import requests
-from notion2pandas import Notion2PandasClient
 import os
 
 def copy_page_content_full(notion: Notion2PandasClient, source_page_id: str, target_page_id: str):

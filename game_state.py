@@ -1,22 +1,22 @@
-import datetime
 import json
 import os
-from typing import List, Optional
-
-import discord
+import random
+from typing import List
 
 from discord_bot import DiscordBot
 from llm import Gemini
 
 
 class GameState:
-    def __init__(self, llm: 'Gemini', bot: 'DiscordBot'):
+    def __init__(self, llm: 'Gemini', bot: 'DiscordBot', notion: 'NotionPagesDB'):
         self.llm = llm
         self.bot = bot
+        self.notion = notion
         self.step = 0
         self.active = False
         self.channel = bot.default_channel
         self.history: List[dict] = []
+        self.random = random.Random()
         with open(os.path.join('msg.json'), 'r', encoding="utf8") as f:
             self.messages = json.load(f)
 

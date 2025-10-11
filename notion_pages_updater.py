@@ -40,7 +40,7 @@ class NotionPagesDB:
 
     def __init__(self):
         # Load credentials and database info
-        with open('notion_data.json', 'r') as notion_file:
+        with open('testbot/notion_data.json', 'r') as notion_file:
             notion_data = json.load(notion_file)
 
         token = os.getenv("NOTION_TOKEN")
