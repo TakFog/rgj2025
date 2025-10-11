@@ -1,7 +1,7 @@
 import json
 import os
 from notion2pandas import Notion2PandasClient
-from notion_copy_page import copy_page_content_full
+from notion_copy_page import copy_page_content_full, clear_page_content
 import ast
 
 def get_text(notion_blocks):
@@ -40,13 +40,16 @@ class NotionPagesDB:
 
     def __init__(self):
         # Load credentials and database info
-        with open('testbot/notion_data.json', 'r') as notion_file:
+        print('init Notion')
+        with open('notion_data.json', 'r') as notion_file:
             notion_data = json.load(notion_file)
 
         token = os.getenv("NOTION_TOKEN")
         database_id = notion_data.get('rgj25').get('id_database_pages_db')
 
         if not token or not database_id:
+            print(token)
+            print(database_id)
             raise ValueError("Missing Notion token or database_id in JSON file")
 
         # Initialize Notion2Pandas client
@@ -54,6 +57,9 @@ class NotionPagesDB:
         self.n2p.set_lambdas('relation', self.relation_read, self.relation_write)
         self.database_id = database_id
         self.df = self.load_dataframe()  # will hold the DataFrame
+        print('Phases count are:{0}'.format(len(self.df)))
+        for indice, riga in self.df.iterrows():
+            clear_page_content(self.n2p, riga['PageID'])
 
     def load_dataframe(self, ascending: bool = True):
         """Fetches data from Notion DB, sorted by Name."""
@@ -67,7 +73,7 @@ class NotionPagesDB:
         }
 
         #custom_block_prop = {'inside_text': get_text}
-
+        print('notion loading dataframe')
         # Load DataFrame
         self.df = self.n2p.from_notion_DB_to_dataframe_kwargs(
             database_id=self.database_id,
@@ -79,10 +85,10 @@ class NotionPagesDB:
         return self.df
 
     def active_phase(self, phase_name: str) -> (bool, str):
+        print('notion active phase: {0}'.format(phase_name))
         filtered_df = self.df[self.df['Name'] == phase_name]
         if filtered_df.empty:
             return False, 'No phase found'
-        print(len(filtered_df))
         for indice, riga in filtered_df.iterrows():
             copy_page_content_full(self.n2p, riga['Content pages DB'], riga['PageID'])
         return True, None

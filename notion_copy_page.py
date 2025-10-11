@@ -112,3 +112,31 @@ def copy_page_content_full(notion: Notion2PandasClient, source_page_id: str, tar
     # Start recursive copy
     copy_block_recursive(source_page_id, target_page_id)
 
+
+def clear_page_content(notion: Notion2PandasClient, page_id: str):
+    """
+    Delete all blocks (content) inside a Notion page.
+
+    Args:
+        notion (Client): an authenticated Notion client
+        page_id (str): ID of the Notion page to clear
+    """
+    has_more = True
+    start_cursor = None
+    deleted_count = 0
+
+    while has_more:
+        children = notion.blocks.children.list(block_id=page_id, start_cursor=start_cursor)
+        results = children.get("results", [])
+        has_more = children.get("has_more", False)
+        start_cursor = children.get("next_cursor")
+
+        for block in results:
+            block_id = block["id"]
+            try:
+                notion.blocks.delete(block_id=block_id)
+                deleted_count += 1
+            except Exception as e:
+                print(f"⚠️ Failed to delete block {block_id}: {e}")
+
+    print(f"✅ Deleted {deleted_count} blocks from page {page_id}.")
