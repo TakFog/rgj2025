@@ -48,6 +48,8 @@ class NotionPagesDB:
         database_id = notion_data.get('rgj25').get('id_database_pages_db')
 
         if not token or not database_id:
+            print(token)
+            print(database_id)
             raise ValueError("Missing Notion token or database_id in JSON file")
 
         # Initialize Notion2Pandas client
@@ -86,7 +88,6 @@ class NotionPagesDB:
         filtered_df = self.df[self.df['Name'] == phase_name]
         if filtered_df.empty:
             return False, 'No phase found'
-        print(len(filtered_df))
         for indice, riga in filtered_df.iterrows():
             copy_page_content_full(self.n2p, riga['Content pages DB'], riga['PageID'])
         return True, None
