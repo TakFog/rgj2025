@@ -1,7 +1,7 @@
 import json
 import os
 from notion2pandas import Notion2PandasClient
-from notion_copy_page import copy_page_content_full
+from notion_copy_page import copy_page_content_full, clear_page_content
 import ast
 
 def get_text(notion_blocks):
@@ -40,7 +40,8 @@ class NotionPagesDB:
 
     def __init__(self):
         # Load credentials and database info
-        with open('testbot/notion_data.json', 'r') as notion_file:
+        print('init Notion')
+        with open('notion_data.json', 'r') as notion_file:
             notion_data = json.load(notion_file)
 
         token = os.getenv("NOTION_TOKEN")
@@ -54,6 +55,9 @@ class NotionPagesDB:
         self.n2p.set_lambdas('relation', self.relation_read, self.relation_write)
         self.database_id = database_id
         self.df = self.load_dataframe()  # will hold the DataFrame
+        print('Phases count are:{0}'.format(len(self.df)))
+        for indice, riga in self.df.iterrows():
+            clear_page_content(self.n2p, riga['PageID'])
 
     def load_dataframe(self, ascending: bool = True):
         """Fetches data from Notion DB, sorted by Name."""
