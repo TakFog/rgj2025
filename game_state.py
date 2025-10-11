@@ -40,7 +40,7 @@ class GameState:
             self.channel = channel_id
             return False
 
-        with open(self.state_path, "r") as f:
+        with open(full_path, "r") as f:
             data = json.load(f)
 
         self.history = data["history"]
