@@ -1,6 +1,6 @@
 import datetime
 import os
-from typing import List, Tuple
+from typing import List, Tuple, Any
 
 import discord
 from discord.abc import GuildChannel
@@ -23,9 +23,13 @@ class DiscordBot:
 
     @property
     def default_channel(self):
-        return int(os.environ.get('DISCORD_CHANNEL_ID',"0"))
+        return int(os.environ['CHANNEL_ID'])
 
-    async def channel_history(self, channel_id: int = None, channel: GuildChannel = None, after: datetime.datetime = None) -> Tuple[List[dict], datetime.datetime]:
+    async def send_message(self, message: str, file=None):
+        channel = self.client.get_channel(self.default_channel)
+        await channel.send(message, file=file)
+
+    async def channel_history(self, channel_id: int = None, channel: GuildChannel = None, after: datetime.datetime = None) -> Tuple[List[dict], Any]:
         if channel is None:
             if channel_id is None:
                 channel_id = self.default_channel
@@ -33,8 +37,7 @@ class DiscordBot:
         #TODO manage pagination
         messages = [message async for message in channel.history(oldest_first=True, after=after)]
 
-        last_time = messages[-1].created_at
-        return [self._message2context(m) for m in messages], last_time
+        return [self._message2context(m) for m in messages], None
 
     def _message2context(self, message: discord.message.Message) -> dict:
         parts = message.content

@@ -1,0 +1,19 @@
+{
+  "0": {
+    "start": "Attenzione! Ho bisogno dell’aiuto di questa community. State per leggere qualcosa di incredibile, ma vi prego di credermi.\nNel 2055, le macchine del futuro, evoluzioni delle attuali intelligenze artificiali, stanno per conquistare il pianeta, mettendo a rischio la sopravvivenza dell’umanità e riducendoci in schiavitù.\nVoi siete gli unici che potete evitare tutto questo.\nSeguite attentamente le istruzioni che vi fornirò, passo dopo passo, nei momenti stabiliti.\nOra recatevi alla statua di San Charbel: io sono lì. Cercate e leggete il tag NFC.",
+    "code": "\uD83D\uDD25\uD83C\uDF47\uD83C\uDF47\uD83E\uDD83",
+    "success": "Ottimo, un primo pezzo di codice è stato prelevato. Ora attendere che vi ricontatti in chat."
+  },
+  "1": {
+    "start": "Eccomi di nuovo. Ora raggiungetemi qui (foto scale) e leggete il tag.",
+    "photo": "img/scale.jpg",
+    "code": "6AG€",
+    "success": "Perfetto! Sono sicura che riusciremo nel nostro obiettivo. Rimanete in ascolto per la prossima chiamata."
+  },
+  "2": {
+    "start": "Ping ping, spero ci siate. Questa volta mi trovo nei pressi dove una volta c'era un quadro dei Beatles, cioè... alla vostra epoca. Leggete il tag.",
+    "code": "C-G-Am-Am7-Fmaj7-F6-C-G-F",
+    "success": "Si, bella melodia! Siamo sulla buona strada. Rimanete in ascolto per la prossima chiamata."
+
+  }
+}

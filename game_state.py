@@ -1,37 +1,61 @@
 import datetime
 import json
 import os
-from optparse import Option
-from typing import List, Optional, Tuple
+from typing import List, Optional
+
+import discord
+
+from discord_bot import DiscordBot
+from llm import Gemini
 
 
 class GameState:
-    def __init__(self):
+    def __init__(self, llm: 'Gemini', bot: 'DiscordBot'):
+        self.llm = llm
+        self.bot = bot
         self.step = 0
+        self.active = False
+        self.channel = bot.default_channel
         self.history: List[dict] = []
-        self.last_message_time: Optional[datetime.datetime] = None
+        with open(os.path.join('msg.json'), 'r', encoding="utf8") as f:
+            self.messages = json.load(f)
 
     @property
     def state_path(self):
-        return os.getenv("GAME_STATE_PATH", "game_state.json")
+        return os.getenv("GAME_STATE_PATH", "game_state")
 
-    def load(self):
-        if not os.path.exists(self.state_path):
+    def state_file(self, channel_id):
+        return os.path.join(self.state_path, "{}.json".format(channel_id))
+
+    def get_actual_message(self):
+        return self.messages[str(self.step)]
+
+    def load(self, channel_id = None) -> bool:
+        if channel_id is None:
+            channel_id = self.channel
+        full_path = self.state_file(channel_id)
+
+        if not os.path.exists(full_path):
             print("Game state file not found")
-            return
+            self.channel = channel_id
+            return False
 
         with open(self.state_path, "r") as f:
             data = json.load(f)
 
         self.history = data["history"]
+        self.channel = data["channel"]
         self.step = data["step"]
-        self.last_message_time = datetime.datetime.fromtimestamp(data["last_message_time"])
+        self.active = data["active"]
+        return True
 
     def save(self):
         data = {
+            "channel": self.channel,
             "step": self.step,
-            "last_message_time": self.last_message_time.timestamp(),
+            "active": self.active,
             "history": self.history,
         }
-        with open(self.state_path, "w") as f:
+        os.makedirs(self.state_path, exist_ok=True)
+        with open(self.state_file(self.channel), "w") as f:
             json.dump(data, f, indent=True)
