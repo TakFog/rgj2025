@@ -32,7 +32,8 @@ client = discord.Client(intents=intents)
 async def on_ready():
     print(f'We have logged in as {client.user}')
     # await asyncio.sleep(10)        # delay
-    await send_message(os.environ.get('CHANNEL_ID'), "Sono pronto!")
+    await history(os.environ.get('CHANNEL_ID'))
+    # await send_message(os.environ.get('CHANNEL_ID'), "Sono pronto!")
 
 @client.event
 async def on_message(message):
@@ -49,6 +50,18 @@ async def on_message(message):
     if message.content.startswith('$img'):
         file = discord.File("pergamena_codex.jpg", filename="pergamena.jpg")
         await message.channel.send("Here's an image!", file=file)
+
+
+async def history(channel_id):
+    global client
+    if channel_id is None:
+        return
+    channel = client.get_channel(int(channel_id))
+    history = [message async for message in channel.history(oldest_first=True)]
+    history2 = [message async for message in channel.history(oldest_first=True, after=history[-3].created_at)]
+    text_hist = [f"{x.author.display_name}: {x.clean_content}" for x in history]
+    for text in text_hist:
+        print(text)
 
 
 async def send_message(channel_id, message):
