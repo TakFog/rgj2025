@@ -7,13 +7,15 @@ from discord_bot import DiscordBot
 from game_logic import init_game_state
 from game_state import GameState
 from llm import Gemini
+from notion_pages_updater import NotionPagesDB
 
 def main():
     load_dotenv()
 
     bot = DiscordBot()
     llm = Gemini("gemini-2.0-flash-lite")
-    state = GameState(bot=bot, llm=llm)
+    notionPages = NotionPagesDB()
+    state = GameState(bot=bot, llm=llm, notion=notionPages)
 
     @bot.client.event
     async def on_ready():
