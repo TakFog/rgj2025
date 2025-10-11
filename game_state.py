@@ -13,7 +13,8 @@ class GameState:
         self.bot = bot
         self.notion = notion
         self.step = 0
-        self.active = False
+        self.active = True
+        self.hint_sent = False
         self.fast_mode = os.environ.get('FAST_MODE', "0") == "1"
         self.channel = bot.default_channel
         self.history: List[dict] = []

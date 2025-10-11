@@ -1,14 +1,8 @@
 import asyncio
 import datetime
-import random
-import threading
-import time
+from typing import List, Tuple
 
-import discord
-
-from discord_bot import DiscordBot
 from game_state import GameState
-from llm import Gemini
 
 
 async def update_history(state: GameState, history_coroutine):
@@ -30,24 +24,39 @@ async def init_step(state: GameState, step: int):
         print(err)
     await state.bot.send_message(message["start"], message.get("photo"))
     state.active = True
+    state.hint_sent = False
     state.save()
+    if "hint" in message:
+        asyncio.create_task(wait_for_hint(state))
 
-async def wait_next_step(state: GameState):
-    phase_config = state.get_actual_message()
+async def wait_time(state: GameState, start_pair: List[int], fast_wait: Tuple[int, int]):
     if state.fast_mode:
-        wait_time = state.random.randint(5, 10)
+        wt = state.random.randint(*fast_wait)
     else:
-        start_hour, start_minute = phase_config["next_start"]
+        start_hour, start_minute = start_pair
         now = datetime.datetime.now()
         if now.hour > start_hour or (now.hour == start_hour and now.minute >= start_minute):
             # wait a bit
-            wait_time = state.random.randint(2*60, 4*60)
+            wt = state.random.randint(2*60, 4*60)
         else:
             # wait the time
-            wait_time = (start_hour*60 + start_minute - now.hour*60 - now.minute) * 60
-    print("wait for", wait_time)
-    await asyncio.sleep(wait_time)
+            wt = (start_hour*60 + start_minute - now.hour*60 - now.minute) * 60
+    print("wait for", wt)
+    await asyncio.sleep(wt)
+
+async def wait_next_step(state: GameState):
+    phase_config = state.get_actual_message()
+    await wait_time(state, phase_config["next_start"], (5, 10))
     await init_step(state, state.step+1)
+
+async def wait_for_hint(state: GameState):
+    hint_step = state.step
+    phase_config = state.get_actual_message()["hint"]
+    await wait_time(state, phase_config["start"], (60, 70))
+    if hint_step != state.step or state.hint_sent or not state.active:
+        return
+    await state.bot.send_message(phase_config.get("message",""), phase_config.get("photo"))
+    state.hint_sent = True
 
 async def on_ready(state: GameState):
     if state.step == 0 and len(state.history) == 0:
@@ -80,7 +89,7 @@ async def on_message(state: GameState, message):
     if time > 0:
         await asyncio.sleep(time)
     await update_history(state, bot.channel_history(channel=message.channel))
-    if state.history[-1]["role"] != 'user':
+    if not state.active or  state.history[-1]["role"] != 'user':
         return
     response = state.llm.generate_content(state.history)
     await message.channel.send(response)
