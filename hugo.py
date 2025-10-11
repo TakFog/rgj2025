@@ -30,11 +30,6 @@ class Insight(BaseModel):
     detail: int = Field(
         description="Detail level (0-3) based on how much the topic was discussed.")
 
-# La classe HugoResponse non serve più ed è meglio rimuoverla,
-# ma la lascio nel tuo codice per riferimento:
-class HugoResponse(BaseModel):
-    insights: List[Insight] = Field(description="A list of insights related to the conversation.")
-
 
 BASE_HUGO_PROMPT = """
 You have a series of user insights that you need to gather during a conversation between a user and an AI agent.
@@ -144,11 +139,12 @@ if __name__ == "__main__":
     Prodotto di Interesse (product_interest): Quale prodotto sta cercando l'utente.
     Budget Massimo (max_budget): Qual è il budget massimo che l'utente è disposto a spendere.
     Urgenza Acquisto (purchase_urgency): Entro quanto tempo l'utente desidera acquistare.
+    Utente Computer (user_pc):L'utente, vuole comprare un computer?
     """
 
     # Cronologia della conversazione (history)
     CHAT_HISTORY = [
-        {"role": "user", "content": "Ciao, stavo cercando un nuovo computer portatile."},
+        {"role": "user", "content": "Ciao, stavo cercando un nuovo stereo."},
         {"role": "model",
          "content": "Perfetto! Ha già in mente un modello o una fascia di prezzo?"},
         {"role": "user",
