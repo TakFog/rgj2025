@@ -73,7 +73,7 @@ class NotionPagesDB:
         }
 
         #custom_block_prop = {'inside_text': get_text}
-
+        print('notion loading dataframe')
         # Load DataFrame
         self.df = self.n2p.from_notion_DB_to_dataframe_kwargs(
             database_id=self.database_id,
@@ -85,6 +85,7 @@ class NotionPagesDB:
         return self.df
 
     def active_phase(self, phase_name: str) -> (bool, str):
+        print('notion active phase: {0}'.format(phase_name))
         filtered_df = self.df[self.df['Name'] == phase_name]
         if filtered_df.empty:
             return False, 'No phase found'
