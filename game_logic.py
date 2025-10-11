@@ -32,22 +32,28 @@ async def init_step(state: GameState, step: int):
     state.active = True
     state.save()
 
-def wait_next_step(state: GameState):
+async def wait_next_step(state: GameState):
     phase_config = state.get_actual_message()
-    start_hour, start_minute = phase_config["next_start"]
-    now = datetime.datetime.now()
-    if now.hour > start_hour or (now.hour == start_hour and now.minute >= start_minute):
-        # wait a bit
-        wait_time = state.random.randint(2*60, 4*60)
+    if state.fast_mode:
+        wait_time = state.random.randint(5, 10)
     else:
-        # wait the time
-        wait_time = (start_hour*60 + start_minute - now.hour*60 - now.minute) * 60
-    time.sleep(wait_time)
-    asyncio.run(init_step(state, state.step+1))
+        start_hour, start_minute = phase_config["next_start"]
+        now = datetime.datetime.now()
+        if now.hour > start_hour or (now.hour == start_hour and now.minute >= start_minute):
+            # wait a bit
+            wait_time = state.random.randint(2*60, 4*60)
+        else:
+            # wait the time
+            wait_time = (start_hour*60 + start_minute - now.hour*60 - now.minute) * 60
+    print("wait for", wait_time)
+    await asyncio.sleep(wait_time)
+    await init_step(state, state.step+1)
 
 async def on_ready(state: GameState):
     if state.step == 0 and len(state.history) == 0:
         await init_step(state, 0)
+    elif not state.active:
+        await wait_next_step(state)
 
 async def on_message(state: GameState, message):
     bot = state.bot
@@ -63,11 +69,14 @@ async def on_message(state: GameState, message):
         state.active = False
         state.save()
         await state.bot.send_message(phase_config["success"])
-        threading.Thread(target=wait_next_step, args=(state,)).start()
+        asyncio.create_task(wait_next_step(state))
         return
 
     # answer to this messsage
-    time = state.random.randint(5, 30)
+    if state.fast_mode:
+        time = 0
+    else:
+        time = state.random.randint(5, 30)
     if time > 0:
         await asyncio.sleep(time)
     await update_history(state, bot.channel_history(channel=message.channel))

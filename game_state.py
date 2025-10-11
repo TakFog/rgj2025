@@ -14,6 +14,7 @@ class GameState:
         self.notion = notion
         self.step = 0
         self.active = False
+        self.fast_mode = os.environ.get('FAST_MODE', "0") == "1"
         self.channel = bot.default_channel
         self.history: List[dict] = []
         self.random = random.Random()

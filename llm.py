@@ -23,3 +23,11 @@ class Gemini:
             ),
         )
         return response.text
+
+
+class DummyLLM:
+    def load_prompt(self, *args, **kwargs):
+        pass
+
+    def generate_content(self, contents: List[dict], *args, **kwargs) -> str:
+        return "Bip Bop sono un robot: "+str(contents[-1])
