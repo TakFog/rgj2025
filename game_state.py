@@ -4,16 +4,18 @@ import random
 from typing import List
 
 from discord_bot import DiscordBot
-from llm import Gemini
+from llm import Llm
+from notion_pages_updater import NotionPagesDB
 
 
 class GameState:
-    def __init__(self, llm: 'Gemini', bot: 'DiscordBot', notion: 'NotionPagesDB'):
+    def __init__(self, llm: 'Llm', bot: 'DiscordBot', notion: 'NotionPagesDB'):
         self.llm = llm
         self.bot = bot
         self.notion = notion
         self.step = 0
         self.active = True
+        self.start_sent = False
         self.hint_sent = False
         self.fast_mode = os.environ.get('FAST_MODE', "0") == "1"
         self.channel = bot.default_channel
@@ -49,13 +51,18 @@ class GameState:
         self.channel = data["channel"]
         self.step = data["step"]
         self.active = data["active"]
+        self.start_sent = data["start_sent"]
+        self.hint_sent = data["hint_sent"]
         return True
 
     def save(self):
+        print(f"save active {self.active}, start_sent {self.start_sent}, hint_sent {self.hint_sent}")
         data = {
             "channel": self.channel,
             "step": self.step,
             "active": self.active,
+            "start_sent": self.start_sent,
+            "hint_sent": self.hint_sent,
             "history": self.history,
         }
         os.makedirs(self.state_path, exist_ok=True)
