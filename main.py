@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from discord_bot import DiscordBot
 from game_state import GameState
+from llm import Gemini
 
 
 async def update_history(state: GameState, history_coroutine):
@@ -14,11 +15,20 @@ def main():
 
     bot = DiscordBot()
     state = GameState()
+    llm = Gemini("gemini-2.0-flash-lite")
+
     state.load()
+    llm.load_prompt(state.step)
 
     @bot.client.event
     async def on_message(message):
         await update_history(state, bot.channel_history(channel = message.channel))
+
+        if message.author == bot.user:
+            return
+
+        response = llm.generate_content(state.history)
+        await message.channel.send(response)
 
     bot.run()
 

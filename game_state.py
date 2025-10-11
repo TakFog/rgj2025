@@ -2,13 +2,13 @@ import datetime
 import json
 import os
 from optparse import Option
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 
 class GameState:
     def __init__(self):
         self.step = 0
-        self.history: List[str] = []
+        self.history: List[dict] = []
         self.last_message_time: Optional[datetime.datetime] = None
 
     @property

@@ -6,10 +6,6 @@ import discord
 from discord.abc import GuildChannel
 
 
-def message2str(message: 'discord.message.Message') -> str:
-    #TODO manage mentions
-    return f"{message.author.display_name}: {message.clean_content}"
-
 
 class DiscordBot:
     def __init__(self):
@@ -21,13 +17,30 @@ class DiscordBot:
     def run(self):
         self.client.run(os.environ['DISCORD_TOKEN'])
 
-    async def channel_history(self, channel_id: int = None, channel: GuildChannel = None, after: datetime.datetime = None) -> Tuple[List[str], datetime.datetime]:
+    @property
+    def user(self):
+        return self.client.user
+
+    @property
+    def default_channel(self):
+        return int(os.environ.get('DISCORD_CHANNEL_ID',"0"))
+
+    async def channel_history(self, channel_id: int = None, channel: GuildChannel = None, after: datetime.datetime = None) -> Tuple[List[dict], datetime.datetime]:
         if channel is None:
             if channel_id is None:
-                channel_id = int(os.environ['DISCORD_CHANNEL_ID'])
+                channel_id = self.default_channel
             channel = self.client.get_channel(channel_id)
         #TODO manage pagination
         messages = [message async for message in channel.history(oldest_first=True, after=after)]
 
         last_time = messages[-1].created_at
-        return [message2str(m) for m in messages], last_time
+        return [self._message2context(m) for m in messages], last_time
+
+    def _message2context(self, message: discord.message.Message) -> dict:
+        parts = message.content
+        if message.author == self.client.user:
+            role = "model"
+        else:
+            role = "user"
+            parts = f"{message.author.display_name}: {parts}"
+        return {"role": role, "parts": parts}
