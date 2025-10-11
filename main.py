@@ -1,24 +1,29 @@
+import asyncio
+
 from dotenv import load_dotenv
+
+import game_logic
 from discord_bot import DiscordBot
+from game_logic import init_game_state
 from game_state import GameState
-
-
-async def update_history(state: GameState, history_coroutine):
-    history, last_time = await history_coroutine
-    state.history = history
-    state.last_message_time = last_time
-    state.save()
+from llm import Gemini
 
 def main():
     load_dotenv()
 
     bot = DiscordBot()
-    state = GameState()
-    state.load()
+    llm = Gemini("gemini-2.0-flash-lite")
+    state = GameState(bot=bot, llm=llm)
+
+    @bot.client.event
+    async def on_ready():
+        await init_game_state(state)
+        await game_logic.on_ready(state)
 
     @bot.client.event
     async def on_message(message):
-        await update_history(state, bot.channel_history(channel = message.channel))
+        if message.channel.id == bot.default_channel:
+            await game_logic.on_message(state, message)
 
     bot.run()
 

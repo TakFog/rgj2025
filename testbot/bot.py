@@ -33,7 +33,7 @@ async def on_ready():
     print(f'We have logged in as {client.user}')
     # await asyncio.sleep(10)        # delay
     await history(os.environ.get('CHANNEL_ID'))
-    # await send_message(os.environ.get('CHANNEL_ID'), "Sono pronto!")
+    await send_message(os.environ.get('CHANNEL_ID'), "Sono pronto!")
 
 @client.event
 async def on_message(message):
