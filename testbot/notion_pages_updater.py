@@ -2,6 +2,7 @@ import json
 import os
 from notion2pandas import Notion2PandasClient
 from notion_copy_page import copy_page_content_full
+import ast
 
 def get_text(notion_blocks):
     """Extracts plain text from the first Notion block containing rich_text."""
@@ -16,6 +17,26 @@ def get_text(notion_blocks):
     return ''
 class NotionPagesDB:
     """Wrapper class for accessing and sorting a Notion database as a DataFrame."""
+    oneToOneRelations = ['Content pages DB']
+
+    def relation_read(self, notion_property: dict, column_name: str):
+        relations = notion_property.get('relation', [])
+        relation_ids = [relation.get('id') for relation in relations]
+        if column_name in self.oneToOneRelations:
+            if len(relation_ids) > 0:
+                return relation_ids[0]
+            return ''
+        return relation_ids
+
+    def relation_write(self, row_value: str, column_name: str):
+        if row_value == '':
+            return {"relation": []}
+        if column_name in self.oneToOneRelations:
+            return {"relation": [{"id": row_value}]}
+        notion_relations = ast.literal_eval(row_value)
+        relation_ids = [{"id": notion_relation} for
+                        notion_relation in notion_relations]
+        return {"relation": relation_ids}
 
     def __init__(self):
         # Load credentials and database info
@@ -30,6 +51,7 @@ class NotionPagesDB:
 
         # Initialize Notion2Pandas client
         self.n2p = Notion2PandasClient(auth=token)
+        self.n2p.set_lambdas('relation', self.relation_read, self.relation_write)
         self.database_id = database_id
         self.df = self.load_dataframe()  # will hold the DataFrame
 
@@ -56,10 +78,20 @@ class NotionPagesDB:
 
         return self.df
 
+    def active_phase(self, phase_name: str) -> (bool, str):
+        self.df = self.df[self.df['Name'] == phase_name]
+        if self.df.empty:
+            return False, 'No phase found'
+        copy_page_content_full(self.n2p, self.df.at[0, 'Content pages DB'], self.df.at[0, 'PageID'])
+        return True, None
+
+
 def main():
     notionPages = NotionPagesDB()
-    copy_page_content_full(notionPages.n2p, '28944e81-37da-8076-a5d8-fee4ce1b2ad6',
-                           '28944e81-37da-8044-824d-d9b3d55dab07')
+    ok, err = notionPages.active_phase('00-Phase')
+    if err is not None:
+        print(err)
+
 
 if __name__ == "__main__":
     main()
