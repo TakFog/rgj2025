@@ -21,9 +21,11 @@ async def init_step(state: GameState, step: int):
     print("init step", step)
     state.step = step
     message = state.get_actual_message()
-    ok, err = state.notion.active_phase(message["notion_nfc_page_key"])
-    if err is not None:
-        print(err)
+    notion_page = message.get("notion_nfc_page_key")
+    if notion_page:
+        ok, err = state.notion.active_phase(notion_page)
+        if err is not None:
+            print(err)
     if not state.start_sent:
         await state.bot.send_message(message["start"], message.get("photo"))
     state.active = True
