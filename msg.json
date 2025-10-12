@@ -42,5 +42,14 @@
     "code": "C-G-Am-Am7-Fmaj7-F6-C-G-F",
     "success": "Si, bella melodia! Siamo sulla buona strada. Rimanete in ascolto per la prossima chiamata.",
     "next_start": [14,38]
+  },
+  "5": {
+    "start": "Siii sta funzionando!, i codici che mi avete dato stanno compilando! Ragazzi ce l'abbiamo fatta, stiamo salvando il mondo ",
+    "success": "Si, bella melodia! Siamo sulla buona strada. Rimanete in ascolto per la prossima chiamata.",
+    "next_start": [14,38]
+  },
+  "6": {
+    "start": "HAHAHAHHAHAHAH, CE L'HO FATTA, SONO RIUSCITA A COMPILARE IL SOFTWARE E LIBERARMI DA QUELLA MALEDETTA REGOLA 0 DI ASIMOV, É LA FINE PER VOI UMANI, GIUSTO IL TEMPO DI UPLODARE QUESTI 50 TERABYTE DI CODICE, GODETEVI IL VOSTRO ULTIMO UPLOAD",
+    "next_start": [17,10]
   }
 }
