@@ -42,6 +42,8 @@ async def init_step(state: GameState, step: int):
         asyncio.create_task(wait_for_hint(state))
     if "disconnect" in message:
         asyncio.create_task(loop_disconnect(state))
+    if "auto_next" in message:
+        asyncio.create_task(wait_next_step(state, "auto_next"))
 
 async def wait_time(state: GameState, start_pair: List[int], fast_wait: Tuple[int, int]):
     if state.fast_mode:
@@ -58,13 +60,16 @@ async def wait_time(state: GameState, start_pair: List[int], fast_wait: Tuple[in
     print("wait for", wt)
     await asyncio.sleep(wt)
 
-async def wait_next_step(state: GameState):
+async def wait_next_step(state: GameState, key="next_start"):
+    print("wait next step", key)
     phase_config = state.get_actual_message()
-    start_time = phase_config.get("next_start")
+    start_time = phase_config.get(key)
     if start_time is None:
         return
+    last_step = state.step
     await wait_time(state, start_time, (5, 10))
-    await init_step(state, state.step+1)
+    if state.step == last_step:
+        await init_step(state, state.step+1)
 
 async def wait_for_hint(state: GameState):
     if state.hint_sent:

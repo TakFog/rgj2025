@@ -1,3 +1,4 @@
+import os
 import time
 
 import vlc
@@ -11,13 +12,14 @@ class VideoPlayer:
         # event_manager.event_attach(vlc.EventType.MediaPlayerEndReached, self._on_end)
 
     def play(self, path: str, loop: bool = False):
+        print("Playing " + path)
         self.loop = loop
         player = self.player
-        media = self.instance.media_new(path)
+        media = self.instance.media_new(os.path.abspath(path))
         player.set_media(media)
         player.set_fullscreen(True)
         player.play()
-    
+
     # def _on_end(self, event):
     #     if self.loop:
     #         self.player.stop()

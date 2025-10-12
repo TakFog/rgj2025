@@ -2,7 +2,7 @@ import vlc
 import time
 
 # Percorso del video
-video_path = r"C:\Users\valen\PycharmProjects\rgj2025\video\matrix.mp4"
+video_path = r"/video/matrix_short.mp4"
 
 player = vlc.MediaPlayer(video_path)
 player.set_fullscreen(True)
