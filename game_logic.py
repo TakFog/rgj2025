@@ -3,6 +3,7 @@ import datetime
 from typing import List, Tuple
 
 from game_state import GameState
+from hugo import gather_insights
 
 
 async def update_history(state: GameState, history_coroutine):
@@ -71,6 +72,22 @@ async def wait_for_hint(state: GameState):
     state.hint_sent = True
     state.save()
 
+async def check_code(state: GameState, message) -> bool:
+    phase_config = state.get_actual_message()
+    if "code" not in phase_config:
+        return False
+    if phase_config["code"] not in message.content:
+        return False
+    print("code found in "+message.content)
+    return True
+
+async def check_hugo(state: GameState) -> bool:
+    hugo = state.get_actual_message().get("hugo")
+    if not hugo:
+        return False
+    insights = gather_insights(state.history, '\n'.join(hugo))
+    return sum(1 for i in insights if i.outcome) == len(hugo)
+
 async def on_ready(state: GameState):
     if state.active:
         await init_step(state, state.step)
@@ -85,9 +102,8 @@ async def on_message(state: GameState, message):
     if not state.active or not state.start_sent:
         return
 
-    phase_config = state.get_actual_message()
-    if phase_config["code"] in message.content:
-        print("code found in "+message.content)
+    if check_code(state, message) or check_hugo(state):
+        phase_config = state.get_actual_message()
         state.active = False
         state.start_sent = False
         state.save()
