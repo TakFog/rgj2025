@@ -20,6 +20,7 @@ class GameState:
         self.fast_mode = os.environ.get('FAST_MODE', "0") == "1"
         self.channel = bot.default_channel
         self.history: List[dict] = []
+        self.old_steps_history_len = 0
         self.random = random.Random()
         with open(os.path.join('msg.json'), 'r', encoding="utf8") as f:
             self.messages = json.load(f)

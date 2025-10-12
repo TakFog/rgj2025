@@ -9,6 +9,7 @@ from hugo import gather_insights
 async def update_history(state: GameState, history_coroutine):
     history, last_time = await history_coroutine
     state.history = history
+
     state.save()
 
 
@@ -34,6 +35,8 @@ async def init_step(state: GameState, step: int):
     state.save()
     if "hint" in message:
         asyncio.create_task(wait_for_hint(state))
+    await update_history(state, state.bot.channel_history(state.bot.default_channel))
+    state.old_steps_history_len = len(state.history)
 
 async def wait_time(state: GameState, start_pair: List[int], fast_wait: Tuple[int, int]):
     if state.fast_mode:
@@ -89,6 +92,9 @@ async def check_hugo(state: GameState) -> bool:
     if not hugo:
         return False
     hugo_th = phase_config.get("hugo_th", len(hugo))
+    hugo_min_len = phase_config.get("hugo_min_len", len(hugo))
+    if len(state.history) - state.old_steps_history_len < hugo_min_len:
+        return False
     insights = gather_insights(state.history, '\n'.join(hugo))
     return sum(1 for i in insights if i.outcome) >= hugo_th
 

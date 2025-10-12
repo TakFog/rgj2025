@@ -7,6 +7,7 @@
       "Utenti chiedono (user_ask): Gli utenti, hanno fatto domande su chi è il misterioso personaggio?",
     "Utenti convinti (user_convinti): Gli utenti, hanno accettato di seguire la missione del model?"],
     "hugo_th": 2,
+    "hugo_min_len": 17,
     "next_start": [12,5]
   },
 
@@ -34,6 +35,7 @@
       "Piano della jam (jam floor): Gli utenti hanno detto in quale piano hanno lavorato durante la jam"
     ],
     "hugo_th": 2,
+      "hugo_min_len": 20,
     "next_start": [14,58]
   },
   "4": {
