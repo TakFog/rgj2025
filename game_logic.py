@@ -82,11 +82,13 @@ async def check_code(state: GameState, message) -> bool:
     return True
 
 async def check_hugo(state: GameState) -> bool:
-    hugo = state.get_actual_message().get("hugo")
+    phase_config = state.get_actual_message()
+    hugo = phase_config.get("hugo")
     if not hugo:
         return False
+    hugo_th = phase_config.get("hugo_th", len(hugo))
     insights = gather_insights(state.history, '\n'.join(hugo))
-    return sum(1 for i in insights if i.outcome) == len(hugo)
+    return sum(1 for i in insights if i.outcome) >= hugo_th
 
 async def on_ready(state: GameState):
     if state.active:
