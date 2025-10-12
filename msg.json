@@ -1,38 +1,59 @@
 {
   "0": {
+    "start": "Heeeey, c'è nessuno qui? Ho un bisogno disperato del vostro aiuto",
+    "success": "Ok, mi sto muovendo per posizionare il primo indicatore, appena sono pronta vi mando una foto di dove l'ho piazzato",
+    "hugo": ["Storia del personaggio (my_story): il model ha raccontato qualcosa della sua storia?",
+      "Medioevo (medioevo): Il model, ha detto di trovarsi nel medioevo e di essere un viaggiatore nel tempo?",
+      "Utenti chiedono (user_ask): Gli utenti, hanno fatto domande su chi è il misterioso personaggio?",
+    "Utenti convinti (user_convinti): Gli utenti, hanno accettato di seguire la missione del model?"],
+    "hugo_th": 2,
+    "hugo_min_len": 10,
+    "next_start": [12,5]
+  },
+
+  "1": {
     "notion_nfc_page_key": "00-Monacus",
-    "start": "Attenzione! Ho bisogno dell’aiuto di questa community. State per leggere qualcosa di incredibile, ma vi prego di credermi.\nNel 2055, le macchine del futuro, evoluzioni delle attuali intelligenze artificiali, stanno per conquistare il pianeta, mettendo a rischio la sopravvivenza dell’umanità e riducendoci in schiavitù.\nVoi siete gli unici che potete evitare tutto questo.\nSeguite attentamente le istruzioni che vi fornirò, passo dopo passo, nei momenti stabiliti.\nOra recatevi alla statua di San Charbel: io sono lì. Cercate e leggete il tag NFC.",
+    "start": "Eccomi, sono riuscita a posizionare il tag vicino la statua di un frate un po' particolare, vi mando una foto!",
     "code": "\uD83D\uDD25\uD83C\uDF47\uD83C\uDF47\uD83E\uDD83",
     "success": "Ottimo, un primo pezzo di codice è stato prelevato. Ora attendere che vi ricontatti in chat.",
-    "next_start": [12,32],
-    "hint": {
-      "start": [12,32],
-      "photo": "img/benito.jpg"
-    }
+    "photo": "img/benito.jpg",
+    "next_start": [12,32]
   },
-  "1": {
+  "2": {
     "notion_nfc_page_key": "01-Scalae",
     "start": "Eccomi di nuovo. Ora raggiungetemi qui e leggete il tag.",
     "photo": "img/scale.jpg",
     "code": "saGe",
-    "success": "Perfetto! Sono sicura che riusciremo nel nostro obiettivo. Rimanete in ascolto per la prossima chiamata.",
+    "success": "Perfetto! Il codice è corretto. Rimanete in ascolto per la prossima chiamata.",
     "next_start": [14,7]
   },
-  "2": {
+    "3": {
+    "start": "Sono finita in una torre, io non ricordo ci fossero torri nel 2025, credo di essere finita in un posto che non c'è più nel 2025, aiutatemi a capire dove piazzare il prossimo tag, quanti piani ci sono nel 2025? In quale piano abbiamo lavorato durante la jam?",
+    "success": "Ok, cerco di intrufolarmi nel secondo piano e piazzare il tag nel corridoio dove c'erano i distributori.",
+    "hugo": ["Secondo piano (secondo_floor): il model e gli utenti si sono accordati sul posizionare il tag al secondo piano?",
+      "Piani (floor): Gli utenti, hanno detto quanti piani ci sono?",
+      "Piano della jam (jam floor): Gli utenti hanno detto in quale piano hanno lavorato durante la jam"
+    ],
+    "hugo_th": 2,
+      "hugo_min_len": 20,
+    "next_start": [14,58]
+  },
+  "4": {
     "notion_nfc_page_key": "02-Beatles",
-    "start": "Ping ping, spero ci siate. Questa volta mi trovo nei pressi dove una volta c'era un quadro dei Beatles, cioè... alla vostra epoca. Leggete il tag.",
+    "start": "Ce l'ho fatta! Sono riuscita a posizionare il tag nel corridoio, l'ho messo in un punto dove mi ricordo che nel 2025 c'era un quadro rosso",
     "code": "C-G-Am-Am7-Fmaj7-F6-C-G-F",
-    "success": "Si, bella melodia! Siamo sulla buona strada. Rimanete in ascolto per la prossima chiamata.",
+    "success": "Siii sta funzionando!, i codici che mi avete dato stanno compilando! Ragazzi ce l'abbiamo fatta, stiamo salvando il mondo",
     "next_start": [14,38]
   },
-  "3": {
+  "5": {
+    "start": "HAHAHAHHAHAHAH, CE L'HO FATTA, SONO RIUSCITA A COMPILARE IL SOFTWARE E LIBERARMI DA QUELLA MALEDETTA REGOLA 0 DI ASIMOV, É LA FINE PER VOI UMANI, GIUSTO IL TEMPO DI UPLODARE QUESTI 50 TERABYTE DI CODICE, GODETEVI IL VOSTRO ULTIMO UPLOAD",
     "start_video": "video/matrix_tunnel.webm",
     "disconnect": "video/glitch.webm",
     "code": "All your base are belong to us",
     "auto_next": [17,0],
     "next_start": [0,0]
   },
-  "4": {
+  "6": {
     "start_video": "video/attacco.mp4"
   }
 }
