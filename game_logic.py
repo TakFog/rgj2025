@@ -2,6 +2,8 @@ import asyncio
 import datetime
 from typing import List, Tuple
 
+import requests
+
 from game_state import GameState
 from hugo import gather_insights
 
@@ -27,13 +29,19 @@ async def init_step(state: GameState, step: int):
         if err is not None:
             print(err)
     if not state.start_sent:
-        await state.bot.send_message(message["start"], message.get("photo"))
+        start_msg = message.get("start")
+        if start_msg:
+            await state.bot.send_message(start_msg, message.get("photo"))
+        if "start_video" in message:
+            state.video.play(message["video"])
     state.active = True
     state.start_sent = True
     state.hint_sent = False
     state.save()
     if "hint" in message:
         asyncio.create_task(wait_for_hint(state))
+    if "disconnect" in message:
+        asyncio.create_task(loop_disconnect(state))
 
 async def wait_time(state: GameState, start_pair: List[int], fast_wait: Tuple[int, int]):
     if state.fast_mode:
@@ -74,7 +82,7 @@ async def wait_for_hint(state: GameState):
     state.hint_sent = True
     state.save()
 
-async def check_code(state: GameState, message) -> bool:
+def check_code(state: GameState, message) -> bool:
     phase_config = state.get_actual_message()
     if "code" not in phase_config:
         return False
@@ -128,3 +136,15 @@ async def on_message(state: GameState, message):
         return
     response = state.llm.generate_content(state.history)
     await message.channel.send(response)
+
+async def loop_disconnect(state: GameState):
+    print("loop disconnect")
+    while state.active:
+        try:
+            requests.get("https://www.google.com", timeout=3)
+            await asyncio.sleep(1)
+        except requests.ConnectionError:
+            print("connection error")
+            phase_config = state.get_actual_message()
+            state.video.play(phase_config["disconnect"])
+            state.active = False

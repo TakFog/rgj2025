@@ -23,6 +23,11 @@ class GameState:
         self.random = random.Random()
         with open(os.path.join('msg.json'), 'r', encoding="utf8") as f:
             self.messages = json.load(f)
+        self._set_video()
+
+    def _set_video(self):
+        import video
+        self.video = video.VideoPlayer()
 
     @property
     def state_path(self):

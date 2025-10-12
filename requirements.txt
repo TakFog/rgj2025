@@ -3,3 +3,4 @@ google-genai
 python-dotenv
 notion2pandas==1.5.1
 google-generativeai
+python-vlc
