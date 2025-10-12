@@ -32,6 +32,7 @@ async def init_step(state: GameState, step: int):
     state.active = True
     state.start_sent = True
     state.hint_sent = False
+    state.llm.load_prompt(state.step)
     state.save()
     if "hint" in message:
         asyncio.create_task(wait_for_hint(state))

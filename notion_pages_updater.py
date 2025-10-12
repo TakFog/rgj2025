@@ -91,6 +91,7 @@ class NotionPagesDB:
             return False, 'No phase found'
         for indice, riga in filtered_df.iterrows():
             copy_page_content_full(self.n2p, riga['Content pages DB'], riga['PageID'])
+        print('notion active phase success: {0}'.format(phase_name))
         return True, None
 
 

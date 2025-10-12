@@ -7,7 +7,7 @@
       "Utenti chiedono (user_ask): Gli utenti, hanno fatto domande su chi è il misterioso personaggio?",
     "Utenti convinti (user_convinti): Gli utenti, hanno accettato di seguire la missione del model?"],
     "hugo_th": 2,
-    "hugo_min_len": 17,
+    "hugo_min_len": 10,
     "next_start": [12,5]
   },
 
@@ -24,7 +24,7 @@
     "start": "Eccomi di nuovo. Ora raggiungetemi qui e leggete il tag.",
     "photo": "img/scale.jpg",
     "code": "saGe",
-    "success": "Perfetto! Sono sicura che riusciremo nel nostro obiettivo. Rimanete in ascolto per la prossima chiamata.",
+    "success": "Perfetto! Il codice è corretto. Rimanete in ascolto per la prossima chiamata.",
     "next_start": [14,7]
   },
     "3": {
