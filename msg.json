@@ -8,7 +8,7 @@
     "Utenti convinti (user_convinti): Gli utenti, hanno accettato di seguire la missione del model?"],
     "hugo_th": 2,
     "hugo_min_len": 10,
-    "next_start": [12,5]
+    "next_start": [14,28]
   },
 
   "1": {
@@ -17,7 +17,7 @@
     "code": "\uD83D\uDD25\uD83C\uDF47\uD83C\uDF47\uD83E\uDD83",
     "success": "Ottimo, un primo pezzo di codice è stato prelevato. Ora attendere che vi ricontatti in chat.",
     "photo": "img/benito.jpg",
-    "next_start": [12,32]
+    "next_start": [14,53]
   },
   "2": {
     "notion_nfc_page_key": "01-Scalae",
@@ -25,7 +25,7 @@
     "photo": "img/scale.jpg",
     "code": "saGe",
     "success": "Perfetto! Il codice è corretto. Rimanete in ascolto per la prossima chiamata.",
-    "next_start": [14,7]
+    "next_start": [15,1]
   },
     "3": {
     "start": "Sono finita in una torre, io non ricordo ci fossero torri nel 2025, credo di essere finita in un posto che non c'è più nel 2025, aiutatemi a capire dove piazzare il prossimo tag, quanti piani ci sono nel 2025? In quale piano abbiamo lavorato durante la jam?",
@@ -36,21 +36,21 @@
     ],
     "hugo_th": 2,
       "hugo_min_len": 16,
-    "next_start": [14,58]
+    "next_start": [15,15]
   },
   "4": {
     "notion_nfc_page_key": "02-Beatles",
     "start": "Ce l'ho fatta! Sono riuscita a posizionare il tag nel corridoio, l'ho messo in un punto dove mi ricordo che nel 2025 c'era un quadro rosso",
     "code": "C-G-Am-Am7-Fmaj7-F6-C-G-F",
     "success": "Siii sta funzionando!, i codici che mi avete dato stanno compilando! Ragazzi ce l'abbiamo fatta, stiamo salvando il mondo",
-    "next_start": [14,38]
+    "next_start": [15,39]
   },
   "5": {
     "start": "HAHAHAHHAHAHAH, CE L'HO FATTA, SONO RIUSCITA A COMPILARE IL SOFTWARE E LIBERARMI DA QUELLA MALEDETTA REGOLA 0 DI ASIMOV, É LA FINE PER VOI UMANI, GIUSTO IL TEMPO DI UPLODARE QUESTI 50 TERABYTE DI CODICE, GODETEVI IL VOSTRO ULTIMO UPLOAD",
     "start_video": "video/matrix_tunnel.webm",
     "disconnect": "video/glitch.webm",
     "code": "All your base are belong to us",
-    "auto_next": [17,0],
+    "auto_next": [15,55],
     "next_start": [0,0]
   },
   "6": {
