@@ -32,8 +32,8 @@ async def init_step(state: GameState, step: int):
         start_msg = message.get("start")
         if start_msg:
             await state.bot.send_message(start_msg, message.get("photo"))
-        if "start_video" in message:
-            state.video.play(message["video"])
+    if "start_video" in message:
+        state.video.play(message["start_video"])
     state.active = True
     state.start_sent = True
     state.hint_sent = False
@@ -119,7 +119,7 @@ async def on_message(state: GameState, message):
     if not state.active or not state.start_sent:
         return
 
-    if check_code(state, message) or check_hugo(state):
+    if check_code(state, message) or await check_hugo(state):
         phase_config = state.get_actual_message()
         state.active = False
         state.start_sent = False
@@ -148,8 +148,10 @@ async def loop_disconnect(state: GameState):
         try:
             requests.get("https://www.google.com", timeout=3)
             await asyncio.sleep(1)
-        except requests.ConnectionError:
+        except:
             print("connection error")
-            phase_config = state.get_actual_message()
-            state.video.play(phase_config["disconnect"])
-            state.active = False
+            if state.active:
+                print("disconnect video")
+                phase_config = state.get_actual_message()
+                state.video.play(phase_config["disconnect"])
+                state.active = False
