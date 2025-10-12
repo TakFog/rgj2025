@@ -84,11 +84,14 @@ def gather_insights(history: List[Dict[str, str]], questions_list: str) -> List[
     generation_config = GenerationConfig(
         response_mime_type="application/json",
     )
-
-    contents = [
-        {'role': msg['role'], 'parts': [{'text': msg['content']}]}
-        for msg in history
-    ]
+    contents = []
+    try:
+        contents = [
+            {'role': msg['role'], 'parts': [{'text': msg['parts']}]}
+            for msg in history
+        ]
+    except KeyError as e:
+        return []
 
     print("gathering insights...")
 

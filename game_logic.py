@@ -36,7 +36,8 @@ async def init_step(state: GameState, step: int):
     if "hint" in message:
         asyncio.create_task(wait_for_hint(state))
     await update_history(state, state.bot.channel_history(state.bot.default_channel))
-    state.old_steps_history_len = len(state.history)
+    if state.step != step:
+        state.old_steps_history_len = len(state.history)
 
 async def wait_time(state: GameState, start_pair: List[int], fast_wait: Tuple[int, int]):
     if state.fast_mode:
@@ -77,7 +78,8 @@ async def wait_for_hint(state: GameState):
     state.hint_sent = True
     state.save()
 
-async def check_code(state: GameState, message) -> bool:
+
+def check_code(state: GameState, message) -> bool:
     phase_config = state.get_actual_message()
     if "code" not in phase_config:
         return False
@@ -86,16 +88,19 @@ async def check_code(state: GameState, message) -> bool:
     print("code found in "+message.content)
     return True
 
+
 async def check_hugo(state: GameState) -> bool:
     phase_config = state.get_actual_message()
     hugo = phase_config.get("hugo")
     if not hugo:
         return False
+    await update_history(state, state.bot.channel_history(state.bot.default_channel))
     hugo_th = phase_config.get("hugo_th", len(hugo))
     hugo_min_len = phase_config.get("hugo_min_len", len(hugo))
     if len(state.history) - state.old_steps_history_len < hugo_min_len:
         return False
     insights = gather_insights(state.history, '\n'.join(hugo))
+    print(insights)
     return sum(1 for i in insights if i.outcome) >= hugo_th
 
 async def on_ready(state: GameState):
@@ -111,8 +116,7 @@ async def on_message(state: GameState, message):
         return
     if not state.active or not state.start_sent:
         return
-
-    if check_code(state, message) or check_hugo(state):
+    if check_code(state, message) or await check_hugo(state):
         phase_config = state.get_actual_message()
         state.active = False
         state.start_sent = False
