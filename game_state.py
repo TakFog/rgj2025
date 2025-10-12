@@ -59,6 +59,7 @@ class GameState:
         self.active = data["active"]
         self.start_sent = data["start_sent"]
         self.hint_sent = data["hint_sent"]
+        self.old_steps_history_len = data["old_steps_history_len"]
         return True
 
     def save(self):
@@ -69,6 +70,7 @@ class GameState:
             "active": self.active,
             "start_sent": self.start_sent,
             "hint_sent": self.hint_sent,
+            "old_steps_history_len": self.old_steps_history_len,
             "history": self.history,
         }
         os.makedirs(self.state_path, exist_ok=True)
