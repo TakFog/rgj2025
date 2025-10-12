@@ -22,6 +22,7 @@ async def init_game_state(state: GameState):
 
 async def init_step(state: GameState, step: int):
     print("init step", step)
+    need_to_old_step = state.step != step
     state.step = step
     message = state.get_actual_message()
     notion_page = message.get("notion_nfc_page_key")
@@ -42,8 +43,9 @@ async def init_step(state: GameState, step: int):
     state.save()
     if "hint" in message:
         asyncio.create_task(wait_for_hint(state))
-    await update_history(state, state.bot.channel_history(state.bot.default_channel))
-    if state.step != step:
+
+    if need_to_old_step:
+        await update_history(state, state.bot.channel_history(state.bot.default_channel))
         state.old_steps_history_len = len(state.history)
     if "disconnect" in message:
         asyncio.create_task(loop_disconnect(state))
