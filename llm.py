@@ -3,7 +3,14 @@ from typing import List
 from google import genai
 from google.genai import types
 
-class Gemini:
+class Llm:
+    def load_prompt(self, step: int):
+        pass
+
+    def generate_content(self, contents: List[dict]) -> str:
+        pass
+
+class Gemini(Llm):
     def __init__(self, model: str):
         self.model = model
         # The client gets the API key from the environment variable `GEMINI_API_KEY`.
@@ -25,7 +32,7 @@ class Gemini:
         return response.text
 
 
-class DummyLLM:
+class DummyLLM(Llm):
     def load_prompt(self, *args, **kwargs):
         pass
 
