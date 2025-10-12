@@ -3,7 +3,7 @@
     "start": "Heeeey, c'è nessuno qui? Ho un bisogno disperato del vostro aiuto",
     "success": "Ok, mi sto muovendo per darvi il primo indicatore, appena sono pronta vi mando una foto di dove l'ho piazzato",
     "hugo": ["Storia del personaggio (my_story): il model ha raccontato qualcosa della sua storia?",
-      "Medioevo (medioevo)", "Il model, ha detto di trovarsi nel medioevo e di essere un viaggiatore nel tempo?",
+      "Medioevo (medioevo): Il model, ha detto di trovarsi nel medioevo e di essere un viaggiatore nel tempo?",
       "Utenti chiedono (user_ask): Gli utenti, hanno fatto domande su chi è il misterioso personaggio?",
     "Utenti convinti (user_convinti): Gli utenti, hanno accettato di seguire la missione del model?"],
     "hugo_th": 2,
@@ -27,18 +27,18 @@
     "next_start": [14,7]
   },
     "3": {
-    "start": "Sono finita in una torre, io non ricordo ci fossero torri nel 2025, credo di essere finita in un posto che non c'è più nel 2025, aiutatemi a capire dove piazzare il prossimo tag, quanti piani ci sono nel 2025?",
-    "success": "Ok, cerco di intrufolarmi nel secondo piano e piazzare il tag nel corridoio della jam.",
+    "start": "Sono finita in una torre, io non ricordo ci fossero torri nel 2025, credo di essere finita in un posto che non c'è più nel 2025, aiutatemi a capire dove piazzare il prossimo tag, quanti piani ci sono nel 2025? In quale piano abbiamo lavorato durante la jam?",
+    "success": "Ok, cerco di intrufolarmi nel secondo piano e piazzare il tag nel corridoio dove c'erano i distributori.",
     "hugo": ["Secondo piano (secondo_floor): il model e gli utenti si sono accordati sul posizionare il tag al secondo piano?",
-      "Medioevo (piani)", "Il model, ha detto di trovarsi nel medioevo e di essere un viaggiatore nel tempo?",
-      "Utenti chiedono (user_ask): Gli utenti, hanno fatto domande su chi è il misterioso personaggio?",
-    "Utenti convinti (user_convinti): Gli utenti, hanno accettato di seguire la missione del model?"],
+      "Piani (floor): Gli utenti, hanno detto quanti piani ci sono?",
+      "Piano della jam (jam floor): Gli utenti hanno detto in quale piano hanno lavorato durante la jam"
+    ],
     "hugo_th": 2,
-    "next_start": [12,5]
+    "next_start": [14,58]
   },
   "4": {
     "notion_nfc_page_key": "02-Beatles",
-    "start": "Ping ping, spero ci siate. Questa volta mi trovo nei pressi dove una volta c'era un quadro dei Beatles, cioè... alla vostra epoca. Leggete il tag.",
+    "start": "Ce l'ho fatta! Sono riuscita a posizionare il tag nel corridoio, l'ho messo in un punto dove mi ricordo che nel 2025 c'era un quadro rosso",
     "code": "C-G-Am-Am7-Fmaj7-F6-C-G-F",
     "success": "Si, bella melodia! Siamo sulla buona strada. Rimanete in ascolto per la prossima chiamata.",
     "next_start": [14,38]
